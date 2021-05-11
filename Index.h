@@ -2,6 +2,7 @@
 #define _INDEX_H_
 
 #include "FileReader.h"
+#include "Url.h"
 #include <map>
 #include <vector>
 
@@ -10,7 +11,7 @@
  */
 class Index {
 	private:
-		std::map<std::string, std::vector<std::size_t>> index;
+		std::map<Url, std::vector<std::size_t>> index;
 
 		Index(const Index &other) = delete;
 		Index& operator=(const Index &other) = delete;
