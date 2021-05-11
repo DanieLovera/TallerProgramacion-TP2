@@ -1,7 +1,7 @@
 #ifndef _INDEX_H_
 #define _INDEX_H_
 
-#include "FileReader.h"
+#include "IfsMonitor.h"
 #include "Url.h"
 #include <map>
 #include <vector>
@@ -17,11 +17,11 @@ class Index {
 		Index& operator=(const Index &other) = delete;
 
 		/*
-		 * @brief Carga el map utilizando un fileReader.
-		 * @param fileReader: Debe estar inicializado correctamente con un
+		 * @brief Carga el map utilizando un ifsMonitor.
+		 * @param ifsMonitor: Debe estar inicializado correctamente con un
 		 * archivo que use el formato URL PAGE_OFFSET PAGE_SIZE.
 		 */
-		void loadMap(FileReader &fileReader);
+		void loadIndex(IfsMonitor &ifsMonitor);
 
 	public:
 		/*

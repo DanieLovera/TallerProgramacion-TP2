@@ -2,38 +2,36 @@
 #include "Url.h"
 #include "Worker.h"
 #include "BlockingQueue.h"
+#include "TargetLoader.h"
+#include "Index.h"
+
 #include <iostream>
 #include <thread>
 #include <chrono>
+#include "Url.h"
 
-#define INDEX_FNAME argv[1]
+#define TARGET_FNAME argv[1]
+#define INDEX_FNAME argv[2]
+#define PAGE_FNAME argv[3]
 
-/*Index indexStructure;
-	indexStructure.load(INDEX_FNAME);*/
 
 int main(int argc, const char *argv[]) {
-	
-	BlockingQueue bq;
-	Url url_1 {"cualquiera.com"};
-	Url url_2 {"nose.com"};
-	bq.push(url_1);
-	bq.push(url_2);
-	Url url1 {" "};
-	Url url2 {" "};
+	IfsMonitor ifsMonitor {PAGE_FNAME}; //Ifstream es compartido entre hilos
+	BlockingQueue blockingQueue; //Cola bloqueante es compartida entre hilos
+	TargetLoader targetLoader;
+	Index indexStructure;
+	targetLoader.load(blockingQueue, TARGET_FNAME);
+	indexStructure.load(INDEX_FNAME);
 
-	bq.pop(url2);
-	bq.pop(url1);
-	url2.print();
-	url1.print();
-	std::thread thread {[&]{
-							bq.pop(url2);
-							url2.print();
-						    std::cout << "DENTRO DEL THREAD"<< std::endl;}};
+	//Worker worker {indexStructure, ifsMonitor, blockingQueue};
 
-	bq.push(url1);
-	bq.close();
 
-	thread.join();
+
+	/* BlockingQueue blockingQueue;
+	TargetLoader targetLoader;
+	targetLoader.load(blockingQueue, TARGET_FNAME);
+	Index indexStructure;
+	indexStructure.load(INDEX_FNAME); */
 
 	return 0;
 }

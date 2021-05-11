@@ -20,23 +20,23 @@ Index& Index::operator=(Index &&other) {
 }
 
 void Index::load(const std::string &fileName) {
-	FileReader fileReader {fileName};
-	loadMap(fileReader);
+	IfsMonitor ifsMonitor {fileName};
+	loadIndex(ifsMonitor);
 }
 
-void Index::loadMap(FileReader &fileReader) {
+void Index::loadIndex(IfsMonitor &ifsMonitor) {
 	std::string key;
 	std::string buffer;
 	const unsigned char buffer_base = 16;
 
-	while (!fileReader.readWord(key)) {
+	while (!ifsMonitor.readWord(key)) {
 		Url url {key};
 		std::vector<std::size_t> mapped {0,0};
 		//Url url_copy {key};
 
-		fileReader.readWord(buffer);
+		ifsMonitor.readWord(buffer);
 		mapped[PAGE_OFFSET] = std::stoul(buffer, nullptr, buffer_base);
-		fileReader.readWord(buffer);
+		ifsMonitor.readWord(buffer);
 		mapped[PAGE_SIZE] = std::stoul(buffer, nullptr, buffer_base);
 		index[std::move(url)] = std::move(mapped);
 		//std::cout << ' ' << index.at(url_copy)[0] << ' ' << index.at(url_copy)[1] << std::endl;
