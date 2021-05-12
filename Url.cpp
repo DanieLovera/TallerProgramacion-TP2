@@ -3,14 +3,11 @@
 
 Url::Url() { }
 
-Url::Url(std::string url) : url {url} { 
-}
+Url::Url(std::string url) : url {url} { }
 
-Url::Url(Url &&other) : url {std::move(other.url)} { 
-}
+Url::Url(Url &&other) : url {std::move(other.url)} { }
 
-Url::~Url() {
-}
+Url::~Url() { }
 
 Url& Url::operator=(Url &&other) {
 	if (this == &other) return *this;

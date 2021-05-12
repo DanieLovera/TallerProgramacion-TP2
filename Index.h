@@ -54,6 +54,8 @@ class Index {
 		 * con el formato URL PAGE_OFFSET PAGE_SIZE.
 		 */
 		void load(const std::string &fileName);
+
+		void lookUp(Url &url, std::size_t &offset, std::size_t &size) const; 
 };
 
 #endif // _INDEX_H_

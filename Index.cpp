@@ -42,3 +42,14 @@ void Index::loadIndex(IfsMonitor &ifsMonitor) {
 		//std::cout << ' ' << index.at(url_copy)[0] << ' ' << index.at(url_copy)[1] << std::endl;
 	}
 }
+
+void Index::lookUp(Url &url, std::size_t &offset, std::size_t &size) const {
+	try {
+		const std::vector<std::size_t> &mapped = index.at(url);
+		offset = mapped[0];
+		size = mapped[1];
+	} catch (const std::out_of_range &exception) {
+		size = 0;
+		std::cout << "No esta en el index" << std::endl;
+	}
+}
