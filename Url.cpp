@@ -1,17 +1,25 @@
 #include <iostream>
 #include "Url.h"
+#include "Ready.h"
 
-Url::Url() { }
+Url::Url() : Url { " " } { }
 
-Url::Url(std::string url) : url {url} { }
+Url::Url(std::string url) : url {url}, state {new Ready { }} { }
 
-Url::Url(Url &&other) : url {std::move(other.url)} { }
+Url::Url(Url &&other) : url {std::move(other.url)}, state {other.state} { 
+	other.state = nullptr;
+}
 
-Url::~Url() { }
+Url::~Url() { 
+	uninit();
+}
 
 Url& Url::operator=(Url &&other) {
 	if (this == &other) return *this;
+	uninit();
 	url = std::move(other.url);
+	state = other.state;
+	other.state = nullptr;
 
 	return *this;
 }
@@ -25,10 +33,13 @@ bool Url::operator<(const Url &other) const {
 }
 
 void Url::print() const {
-	std::cout << url << std::endl;
+	std::cout << url << " ";
+	state->print();
+	std::cout << std::endl;
 }
 
-Url Url::clone() const {
-	Url urlCopy {url};
-	return urlCopy;
+void Url::uninit() {
+	if (state != nullptr) {
+		delete state;
+	}
 }

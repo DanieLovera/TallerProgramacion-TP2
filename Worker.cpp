@@ -23,10 +23,11 @@ Worker::~Worker() { }
 
 void Worker::run() {
 	Url url;
-	std::size_t offset;
-	std::size_t size;
+	std::size_t offset = 0;
+	std::size_t size = 0;
 	blockingQueue.pop(url);
 	indexStructure.lookUp(url, offset, size);
+	//std::cout << offset << " " << size << std::endl;
 	
 	/*if (size > 0) {
 		//PROCESAMOS

@@ -50,6 +50,7 @@ void Index::lookUp(Url &url, std::size_t &offset, std::size_t &size) const {
 		size = mapped[1];
 	} catch (const std::out_of_range &exception) {
 		size = 0;
-		std::cout << "No esta en el index" << std::endl;
+		offset = 0;
+		//std::cout << "No esta en el index" << std::endl;
 	}
 }

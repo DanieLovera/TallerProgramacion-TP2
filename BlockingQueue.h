@@ -21,7 +21,7 @@ class BlockingQueue {
 	public:
 		BlockingQueue();
 		~BlockingQueue();
-		void push(const Url &url);
+		void push(Url &&url);
 		void pop(Url &url);
 		void close();
 };
