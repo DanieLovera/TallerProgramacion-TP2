@@ -2,12 +2,15 @@
 #define _URL_H_
 
 #include <string>
+class UrlState;
 
 class Url {
 	private:
 		std::string url;
+		UrlState *state;
 		Url(const Url &other) = delete;
 		Url& operator=(const Url &other) = delete;
+		void uninit();
 
 	public:
 		Url();
@@ -17,7 +20,6 @@ class Url {
 		Url& operator=(Url &&other);
 		bool operator<(const Url &other) const;
 		bool equals(const Url &other) const;
-		Url clone() const;
 		void print() const;
 };
 

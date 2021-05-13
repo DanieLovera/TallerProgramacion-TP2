@@ -4,9 +4,10 @@ BlockingQueue::BlockingQueue() : isClose {false} { }
 
 BlockingQueue::~BlockingQueue() { }
 
-void BlockingQueue::push(const Url &url) {
+void BlockingQueue::push(Url &&url) {
 	std::lock_guard<std::mutex> lock {mutex};
-	urls.push(url.clone());
+	//urls.push(url.clone());
+	urls.push(std::move(url));
 	cv.notify_all();
 }
 
