@@ -6,13 +6,15 @@ class UrlState;
 
 class Url {
 	private:
-		std::string url;
-		UrlState *state;
+		//std::string url;
+		//UrlState *state;
 		Url(const Url &other) = delete;
 		Url& operator=(const Url &other) = delete;
-		void uninit();
+		void freeIfNotNullState();
 
 	public:
+		std::string url;
+		UrlState *state;
 		Url();
 		Url(std::string url);
 		Url(Url &&other);
@@ -21,6 +23,9 @@ class Url {
 		bool operator<(const Url &other) const;
 		bool equals(const Url &other) const;
 		void print() const;
+		void statusToDead();
+		void statusToExplored();
+		bool isValid();
 };
 
 #endif // _URL_H_

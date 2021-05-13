@@ -23,16 +23,22 @@ int main(int argc, const char *argv[]) {
 
 	indexStructure.load(INDEX_FNAME);
 	targetLoader.load(blockingQueue, TARGET_FNAME);
-	
 
 	Worker worker {indexStructure, ifsMonitor, blockingQueue, result};
 	Worker worker2 {indexStructure, ifsMonitor, blockingQueue, result};
 	worker.start();
 	worker2.start();
 
+	std::this_thread::sleep_for(std::chrono::seconds(2));
+	blockingQueue.close();
 
 	worker.join();
 	worker2.join();
+
+	
+	for (const Url &url : result) {
+		url.print();
+	}
 
 	return 0;
 }

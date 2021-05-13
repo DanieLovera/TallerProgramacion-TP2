@@ -2,6 +2,7 @@
 #include "BlockingQueue.h"
 #include "Index.h"
 #include <iostream>
+#include <sstream>
 
 Worker::Worker(Index &indexStructure, 
 			   IfsMonitor &ifsMonitor, 
@@ -28,15 +29,30 @@ void Worker::run() {
 	blockingQueue.pop(url);
 	indexStructure.lookUp(url, offset, size);
 	//std::cout << offset << " " << size << std::endl;
-	
-	/*if (size > 0) {
-		//PROCESAMOS
-		//SETEAMOS STATE DE URL A EXPLORED
-	} else {
-		//SETEAMOS STATE DE URL A DEAD
-	}*/
+	//std::cout << url.url << std::endl;
 
-	url.print();
-	//std::cout << "PROBANDO PROBANDO" << std::endl;
-	//std::cout << "PROBANDO PROBANDO2" << std::endl;
+	/*if (size > 0) {
+		char *buffer = new char[size + 1];
+		ifsMonitor.readBlockFromTo(buffer, offset, size);
+		buffer[size] = '\0';
+		std::string string {buffer};
+		std::istringstream iss {std::move(string)};
+		std::string word;
+
+		while(iss >> word) {
+			std::size_t found = word.find(url.url);
+			//word.find(url.url);
+			if (found != std::string::npos) {
+		//		url.statusToExplored();
+		//		result.insert(std::move(word));
+			//	std::cout << url.url << std::endl;
+			}
+			//std::cout << word << std::endl;
+		}
+
+		if (buffer != nullptr) delete[] buffer;
+	} else {
+		url.statusToDead();
+		if (url.isValid()) result.insert(std::move(url));
+	}*/
 }

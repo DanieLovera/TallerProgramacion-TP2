@@ -3,6 +3,7 @@
 
 #include <fstream>
 #include <string>
+#include <mutex>
 
 /*
  * Clase RAII para proteger la lectura del recurso ifstream.
@@ -10,6 +11,8 @@
 class IfsMonitor {
 	private:
 		std::ifstream ifs;
+		std::mutex m;
+
 		IfsMonitor(const IfsMonitor &other) = delete;
 		IfsMonitor& operator=(const IfsMonitor &other) = delete;
 
@@ -53,6 +56,8 @@ class IfsMonitor {
 		bool readWord(std::string &buffer);
 
 		bool readLine(std::string &buffer);
+
+		void readBlockFromTo(char *buffer, std::size_t from, std::size_t to);
 };
 
 #endif // _IFS_MONITOR_H_

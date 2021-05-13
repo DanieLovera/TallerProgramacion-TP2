@@ -8,5 +8,5 @@ Explored::Explored(Explored &&other) : UrlState {std::move(other)} { }
 Explored::~Explored() { }
 
 void Explored::print() const {
-	std::cout << "Estado EXPLORED" << std::endl;
+	std::cout << "-> explored";
 }

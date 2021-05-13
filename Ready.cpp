@@ -8,5 +8,5 @@ Ready::Ready(Ready &&other) : UrlState {std::move(other)} { }
 Ready::~Ready() { }
 
 void Ready::print() const {
-	std::cout << "Estado READY" << std::endl;
+	std::cout << "-> ready";
 }
