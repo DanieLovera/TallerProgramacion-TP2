@@ -1,4 +1,5 @@
 #include "BlockingQueue.h"
+#include <iostream>
 
 BlockingQueue::BlockingQueue() : isClose {false} { }
 
@@ -6,21 +7,21 @@ BlockingQueue::~BlockingQueue() { }
 
 void BlockingQueue::push(Url &&url) {
 	std::lock_guard<std::mutex> lock {mutex};
-	//urls.push(url.clone());
 	urls.push(std::move(url));
 	cv.notify_all();
 }
 
-void BlockingQueue::pop(Url &url) {
+Url BlockingQueue::pop() {
 	std::unique_lock<std::mutex> lock {mutex};
 	
 	while (urls.empty()) {
-		if (isClose) return;
+		if (isClose) throw ClosedQueueException();
 		cv.wait(lock);
 	}
 
-	url = std::move(urls.front());
+	Url url = std::move(urls.front());
 	urls.pop();
+	return url;
 }
 
 void BlockingQueue::close() {

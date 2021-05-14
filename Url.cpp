@@ -1,12 +1,14 @@
-#include <iostream>
 #include "Url.h"
+#include "Index.h"
 #include "Ready.h"
 #include "Dead.h"
 #include "Explored.h"
+#include "IfsMonitor.h"
+#include <iostream>
 
 Url::Url() : Url { " " } { }
 
-Url::Url(std::string url) : url {url}, state {new Ready { }} { }
+Url::Url(std::string url) : url {url}, state {new Ready {}} { }
 
 Url::Url(Url &&other) : url {std::move(other.url)}, state {other.state} { 
 	other.state = nullptr;
@@ -46,16 +48,43 @@ void Url::freeIfNotNullState() {
 	}
 }
 
-void Url::statusToExplored() {
+void Url::setState(UrlState *state) {
 	freeIfNotNullState();
-	state = new Explored { };
+	this->state = state;
 }
 
-void Url::statusToDead() {
-	freeIfNotNullState();
-	state = new Dead { };
+void Url::validate(const Index &indexStructure, 
+				   std::size_t &offset, 
+				   std::size_t &size) {
+	state->handleValidation(indexStructure, offset, size, *this);
 }
 
-bool Url::isValid() {
-	return url != " ";
+void Url::exploreLinks(IfsMonitor &ifsMonitor, 
+					   const std::string &domainFilter, 
+					   std::size_t &offset, 
+					   std::size_t &size,
+					   std::string &result) {
+	state->handleExploration(ifsMonitor, domainFilter, 
+							 offset, size, 
+							 result, *this);
+}
+
+bool Url::isSubUrl(const std::string url, const std::string &domainFilter) {
+	bool status = false;
+	std::size_t found = url.find("http://");
+
+	if (found != std::string::npos) {
+		status = filter(url, domainFilter);
+	}
+	return status;
+}
+
+bool Url::filter(const std::string url, const std::string &domainFilter) {
+	bool status = false;
+	std::size_t found = url.find(domainFilter);
+
+	if (found != std::string::npos) {
+		status = true;
+	}
+	return status;
 }

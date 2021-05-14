@@ -19,11 +19,6 @@ Index& Index::operator=(Index &&other) {
 	return *this;
 }
 
-void Index::load(const std::string &fileName) {
-	IfsMonitor ifsMonitor {fileName};
-	loadIndex(ifsMonitor);
-}
-
 void Index::loadIndex(IfsMonitor &ifsMonitor) {
 	std::string key;
 	std::string buffer;
@@ -43,6 +38,11 @@ void Index::loadIndex(IfsMonitor &ifsMonitor) {
 	}
 }
 
+void Index::load(const std::string &fileName) {
+	IfsMonitor ifsMonitor {fileName};
+	loadIndex(ifsMonitor);
+}
+
 void Index::lookUp(Url &url, std::size_t &offset, std::size_t &size) const {
 	try {
 		const std::vector<std::size_t> &mapped = index.at(url);
@@ -51,6 +51,5 @@ void Index::lookUp(Url &url, std::size_t &offset, std::size_t &size) const {
 	} catch (const std::out_of_range &exception) {
 		size = 0;
 		offset = 0;
-		//std::cout << "No esta en el index" << std::endl;
 	}
 }

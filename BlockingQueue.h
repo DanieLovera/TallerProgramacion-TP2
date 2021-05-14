@@ -6,6 +6,13 @@
 #include <mutex>
 #include <condition_variable>
 
+class ClosedQueueException : public std::exception {
+	public:
+		const char *what() {
+			return "Queue is closed";
+		}
+};
+
 class BlockingQueue {
 	private:
 		std::queue<Url> urls;
@@ -22,7 +29,7 @@ class BlockingQueue {
 		BlockingQueue();
 		~BlockingQueue();
 		void push(Url &&url);
-		void pop(Url &url);
+		Url pop();
 		void close();
 };
 

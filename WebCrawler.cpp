@@ -20,20 +20,24 @@ int main(int argc, const char *argv[]) {
 	Index indexStructure; //La estructura index es compartida entre hilos
 	TargetLoader targetLoader;
 	std::set<Url> result;
+	std::string domainFilter {"savewalterwhit.com"};
 
 	indexStructure.load(INDEX_FNAME);
 	targetLoader.load(blockingQueue, TARGET_FNAME);
 
-	Worker worker {indexStructure, ifsMonitor, blockingQueue, result};
-	Worker worker2 {indexStructure, ifsMonitor, blockingQueue, result};
+	Worker worker {indexStructure, ifsMonitor, blockingQueue, result, domainFilter};
+	Worker worker2 {indexStructure, ifsMonitor, blockingQueue, result, domainFilter};
+	//Worker worker3 {indexStructure, ifsMonitor, blockingQueue, result, domainFilter};
 	worker.start();
 	worker2.start();
+	//worker3.start();
 
-	std::this_thread::sleep_for(std::chrono::seconds(2));
-	blockingQueue.close();
+	//std::this_thread::sleep_for(std::chrono::seconds(2));
+	//blockingQueue.close();
 
 	worker.join();
 	worker2.join();
+	//worker3.join();
 
 	
 	for (const Url &url : result) {

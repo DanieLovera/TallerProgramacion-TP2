@@ -17,15 +17,19 @@ class Worker : public Thread {
 		IfsMonitor &ifsMonitor;
 		BlockingQueue &blockingQueue;
 		std::set<Url> &result;
+		std::string &domainFilter;
+
 		Worker(const Worker &other) = delete;
 		Worker& operator=(const Worker &other) = delete;
 		Worker& operator=(Worker &&other) = delete;
+		void pushUrls(std::string &urlsResult);
 
 	public:
 		Worker(Index &indexStructure, 
 			   IfsMonitor &ifsMonitor, 
 			   BlockingQueue &blockingQueue, 
-			   std::set<Url> &result);
+			   std::set<Url> &result, 
+			   std::string &domainFilter);
 		Worker(Worker &&other);
 		~Worker();
 

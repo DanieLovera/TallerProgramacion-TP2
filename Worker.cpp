@@ -7,52 +7,48 @@
 Worker::Worker(Index &indexStructure, 
 			   IfsMonitor &ifsMonitor, 
 			   BlockingQueue &blockingQueue, 
-			   std::set<Url> &result) :
+			   std::set<Url> &result, 
+			   std::string &domainFilter) :
 	indexStructure {indexStructure}, 
 	ifsMonitor {ifsMonitor}, 
 	blockingQueue {blockingQueue},
-	result {result} { }
+	result {result}, 
+	domainFilter {domainFilter}{ }
 		
 Worker::Worker(Worker &&other) :
 							indexStructure {other.indexStructure}, 
 							ifsMonitor {other.ifsMonitor}, 
 							blockingQueue {other.blockingQueue},
-							result {other.result} { 
+							result {other.result}, 
+							domainFilter {other.domainFilter}{ 
 }
 
 Worker::~Worker() { }
 
+void Worker::pushUrls(std::string &urlsResult) {
+	std::istringstream iss {std::move(urlsResult)};
+	std::string readWord;
+	while(iss >> readWord) {
+		Url url {readWord};
+		blockingQueue.push(std::move(url));
+	}	
+}
+
 void Worker::run() {
-	Url url;
+	std::string urlsResult;
 	std::size_t offset = 0;
 	std::size_t size = 0;
-	blockingQueue.pop(url);
-	indexStructure.lookUp(url, offset, size);
-	//std::cout << offset << " " << size << std::endl;
-	//std::cout << url.url << std::endl;
-
-	/*if (size > 0) {
-		char *buffer = new char[size + 1];
-		ifsMonitor.readBlockFromTo(buffer, offset, size);
-		buffer[size] = '\0';
-		std::string string {buffer};
-		std::istringstream iss {std::move(string)};
-		std::string word;
-
-		while(iss >> word) {
-			std::size_t found = word.find(url.url);
-			//word.find(url.url);
-			if (found != std::string::npos) {
-		//		url.statusToExplored();
-		//		result.insert(std::move(word));
-			//	std::cout << url.url << std::endl;
-			}
-			//std::cout << word << std::endl;
-		}
-
-		if (buffer != nullptr) delete[] buffer;
-	} else {
-		url.statusToDead();
-		if (url.isValid()) result.insert(std::move(url));
-	}*/
+	try {
+		Url url = blockingQueue.pop();
+		url.validate(indexStructure, offset, size);
+		url.exploreLinks(ifsMonitor, domainFilter, offset, size, urlsResult);
+		pushUrls(urlsResult);
+		result.insert(std::move(url));
+	
+	} catch (ClosedQueueException &error) {
+		std::cout << error.what() << std::endl;
+		return;
+	}
 }
+//std::cout << urlsResult << std::endl;
+//std::cout << offset << " " << size << std::endl;

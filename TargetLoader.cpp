@@ -1,4 +1,5 @@
 #include "TargetLoader.h"
+#include <iostream>
 
 TargetLoader::TargetLoader() { }
 
@@ -12,7 +13,6 @@ TargetLoader& TargetLoader::operator=(TargetLoader &&other) {
 
 void TargetLoader::loadQueue(BlockingQueue &blockingQueue, IfsMonitor &ifsMonitor) const {
 	std::string domain;
-
 	while (!ifsMonitor.readWord(domain)) {
 		Url url {domain};
 		blockingQueue.push(std::move(url));
