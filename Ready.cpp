@@ -1,6 +1,7 @@
 #include "Ready.h"
 #include "Dead.h"
 #include "Explored.h"
+#include "Url.h"
 #include <iostream>
 #include <sstream>
 

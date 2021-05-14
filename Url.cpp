@@ -69,22 +69,26 @@ void Url::exploreLinks(IfsMonitor &ifsMonitor,
 							 result, *this);
 }
 
-bool Url::isSubUrl(const std::string url, const std::string &domainFilter) {
+bool Url::isSubUrl(const std::string &url, const std::string &domainFilter) {
+	const std::string protocol {"http://"};
 	bool status = false;
-	std::size_t found = url.find("http://");
+	std::size_t found = url.find(protocol);
 
 	if (found != std::string::npos) {
-		status = filter(url, domainFilter);
+		std::string newDomain = url.substr(protocol.length());
+		status = filter(newDomain, domainFilter);
 	}
 	return status;
 }
 
-bool Url::filter(const std::string url, const std::string &domainFilter) {
+bool Url::filter(const std::string &url, const std::string &domainFilter) {
 	bool status = false;
-	std::size_t found = url.find(domainFilter);
-
+	std::size_t found = url.find_first_of("/");
 	if (found != std::string::npos) {
-		status = true;
+		std::size_t domainLength = domainFilter.length();
+		if (found >= domainLength) {
+			status = (url.compare(found - domainLength, domainLength, domainFilter) == 0);
+		}
 	}
 	return status;
 }

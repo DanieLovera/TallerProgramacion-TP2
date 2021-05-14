@@ -13,7 +13,7 @@ class Url {
 		Url(const Url &other) = delete;
 		Url& operator=(const Url &other) = delete;
 		void freeIfNotNullState();
-		bool filter(const std::string url, const std::string &domainFilter);
+		bool filter(const std::string &url, const std::string &domainFilter);
 
 	public:
 		Url();
@@ -31,7 +31,7 @@ class Url {
 					  	  std::size_t &offset, 
 					  	  std::size_t &size,
 					  	  std::string &result);
-		bool isSubUrl(const std::string url, const std::string &domainFilter);
+		bool isSubUrl(const std::string &url, const std::string &domainFilter);
 		void setState(UrlState *state);
 		void print() const;
 };

@@ -22,7 +22,7 @@ class Worker : public Thread {
 		Worker(const Worker &other) = delete;
 		Worker& operator=(const Worker &other) = delete;
 		Worker& operator=(Worker &&other) = delete;
-		void pushUrls(std::string &urlsResult);
+		void pushUrls(const std::string &urlsResult);
 
 	public:
 		Worker(Index &indexStructure, 
