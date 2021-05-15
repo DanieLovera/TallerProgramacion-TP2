@@ -5,13 +5,10 @@
 #include <string>
 #include <mutex>
 
-/*
- * Clase RAII para proteger la lectura del recurso ifstream.
- */
 class IfsMonitor {
 	private:
 		std::ifstream ifs;
-		std::mutex m;
+		std::mutex mutex;
 
 		IfsMonitor(const IfsMonitor &other) = delete;
 		IfsMonitor& operator=(const IfsMonitor &other) = delete;
@@ -40,7 +37,7 @@ class IfsMonitor {
 		~IfsMonitor();
 		
 		/*
-		 * @brief Asignacion por moviento
+		 * @brief Asignacion por moviento.
 		 * @param other: Objeto del cual se moveran los recursos.
 		 * @returns Devuelve una referencia a si mismo.
 		 */
@@ -55,9 +52,17 @@ class IfsMonitor {
 		 */
 		bool readWord(std::string &buffer);
 
-		//bool readLine(std::string &buffer);
-
-		void readBlockFromTo(char *buffer, std::size_t from, std::size_t to);
+		/**
+		 * @brief Lee un bloque del archivo controlado por el ifs.
+		 * @param buffer: Tendra el bloque leído del ifs, deberá ser
+		 * lo suficientemente grande como para guardar (to - from) bytes.
+		 * @param from: Inicio del punto en donde se comenzara a leer el
+		 * archivo.
+		 * @param to: Marca el ultimo caracter que sera leido del ifs.
+		 */
+		void readBlockFromTo(char *buffer, 
+							 const std::size_t from, 
+							 const std::size_t to);
 };
 
 #endif // _IFS_MONITOR_H_

@@ -1,6 +1,6 @@
 #include "Explored.h"
-#include <iostream>
 #include <string>
+#include <iostream>
 #include <utility>
 
 Explored::Explored() : UrlState { } { }
@@ -13,7 +13,7 @@ void Explored::print() const {
 	std::cout << "-> explored";
 }
 
-void Explored::handleValidation(const Index &indexStructure, 
+void Explored::handleValidation(const IndexMonitor &indexStructure, 
 					  			std::size_t &offset, 
 					 			std::size_t &size, 
 					 			Url &context) { }

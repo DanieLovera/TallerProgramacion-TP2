@@ -1,17 +1,12 @@
-#include "Index.h"
-#include "Url.h"
-#include "Worker.h"
+#include "IfsMonitor.h"
 #include "BlockingQueue.h"
+#include "IndexMonitor.h"
 #include "TargetLoader.h"
-#include "Index.h"
 #include "SetMonitor.h"
-
-#include <iostream>
-#include <thread>
+#include "Worker.h"
 #include <chrono>
 #include <string>
 #include <vector>
-#include "Url.h"
 
 #define TARGET_FNAME argv[1]
 #define ALLOWED_DOMAINS argv[2]
@@ -23,10 +18,10 @@
 int main(int argc, const char *argv[]) {
 	IfsMonitor ifsMonitor(PAGE_FNAME);
 	BlockingQueue blockingQueue;
-	Index indexStructure;
+	IndexMonitor indexStructure;
 	TargetLoader targetLoader;
 	SetMonitor result;
-	std::string domainFilter(ALLOWED_DOMAINS);
+	const std::string domainFilter(ALLOWED_DOMAINS);
 
 	indexStructure.load(INDEX_FNAME);
 	targetLoader.load(blockingQueue, TARGET_FNAME);

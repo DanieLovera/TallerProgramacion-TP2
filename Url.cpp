@@ -1,9 +1,5 @@
 #include "Url.h"
-#include "Index.h"
 #include "Ready.h"
-#include "Dead.h"
-#include "Explored.h"
-#include "IfsMonitor.h"
 #include <iostream>
 #include <string>
 #include <utility>
@@ -30,10 +26,6 @@ Url& Url::operator=(Url &&other) {
 	return *this;
 }
 
-/*bool Url::equals(const Url &other) const {
-	return this->url.compare(other.url) == 0;
-}*/
-
 bool Url::operator<(const Url &other) const {
 	return this->url < other.url;
 }
@@ -55,7 +47,7 @@ void Url::setState(UrlState *state) {
 	this->state = state;
 }
 
-void Url::validate(const Index &indexStructure, 
+void Url::validate(const IndexMonitor &indexStructure, 
 				   std::size_t &offset, 
 				   std::size_t &size) {
 	state->handleValidation(indexStructure, offset, size, *this);

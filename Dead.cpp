@@ -1,6 +1,6 @@
 #include "Dead.h"
-#include <iostream>
 #include <string>
+#include <iostream>
 #include <utility>
 
 Dead::Dead() : UrlState { } { }
@@ -13,7 +13,7 @@ void Dead::print() const {
 	std::cout << "-> dead";
 }
 
-void Dead::handleValidation(const Index &indexStructure, 
+void Dead::handleValidation(const IndexMonitor &indexStructure, 
 							std::size_t &offset, 
 							std::size_t &size, 
 							Url &context) { }

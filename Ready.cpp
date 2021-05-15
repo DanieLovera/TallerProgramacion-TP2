@@ -2,6 +2,8 @@
 #include "Dead.h"
 #include "Explored.h"
 #include "Url.h"
+#include "IfsMonitor.h"
+#include "IndexMonitor.h"
 #include <iostream>
 #include <sstream>
 #include <string>
@@ -17,7 +19,7 @@ void Ready::print() const {
 	std::cout << "-> ready";
 }
 
-void Ready::handleValidation(const Index &indexStructure, 
+void Ready::handleValidation(const IndexMonitor &indexStructure, 
 							 std::size_t &offset, 
 							 std::size_t &size, 
 							 Url &context) {
