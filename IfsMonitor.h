@@ -26,7 +26,7 @@ class IfsMonitor {
 		 * @brief Constructor de la clase.
 		 * @param fileName: Nombre del archivo que se quiere tomar.
 		 */
-		IfsMonitor(const std::string &fileName);
+		explicit IfsMonitor(const std::string &fileName);
 
 		/*
 		 * @brief Constructor por movimiento de la clase.

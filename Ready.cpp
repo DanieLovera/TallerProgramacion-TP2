@@ -4,6 +4,7 @@
 #include "Url.h"
 #include <iostream>
 #include <sstream>
+#include <string>
 
 Ready::Ready() : UrlState { } { }
 
@@ -32,9 +33,9 @@ void Ready::handleExploration(IfsMonitor &ifsMonitor,
 	char *buffer = new char[size + 1];
 	ifsMonitor.readBlockFromTo(buffer, offset, size);
 	buffer[size] = '\0';
-	std::string string {buffer};
+	std::string string(buffer);
 
-	std::istringstream iss {std::move(string)};
+	std::istringstream iss(std::move(string));
 	std::string readWord;
 	while(iss >> readWord) {
 	    if (context.isSubUrl(readWord, domainFilter)) {

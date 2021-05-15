@@ -2,6 +2,7 @@
 #define _DEAD_H_
 
 #include "UrlState.h"
+#include <string>
 
 class Dead : public UrlState {
 	private:

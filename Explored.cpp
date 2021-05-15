@@ -1,5 +1,6 @@
 #include "Explored.h"
 #include <iostream>
+#include <string>
 
 Explored::Explored() : UrlState { } { }
 

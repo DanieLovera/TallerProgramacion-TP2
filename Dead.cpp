@@ -1,5 +1,6 @@
 #include "Dead.h"
 #include <iostream>
+#include <string>
 
 Dead::Dead() : UrlState { } { }
 

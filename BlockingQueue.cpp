@@ -6,13 +6,13 @@ BlockingQueue::BlockingQueue() : isClose {false} { }
 BlockingQueue::~BlockingQueue() { }
 
 void BlockingQueue::push(Url &&url) {
-	std::lock_guard<std::mutex> lock {mutex};
+	std::lock_guard<std::mutex> lock(mutex);
 	urls.push(std::move(url));
 	cv.notify_all();
 }
 
 Url BlockingQueue::pop() {
-	std::unique_lock<std::mutex> lock {mutex};
+	std::unique_lock<std::mutex> lock(mutex);
 	
 	while (urls.empty()) {
 		if (isClose) throw ClosedQueueException();
@@ -25,7 +25,7 @@ Url BlockingQueue::pop() {
 }
 
 void BlockingQueue::close() {
-	std::lock_guard<std::mutex> lock {mutex};
+	std::lock_guard<std::mutex> lock(mutex);
 	isClose = true;
 	cv.notify_all();
 }

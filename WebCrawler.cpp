@@ -13,6 +13,8 @@
 #define TARGET_FNAME argv[1]
 #define INDEX_FNAME argv[2]
 #define PAGE_FNAME argv[3]
+#define ALLOWED_DOMAINS argv[4]
+//#define SLEEP_TIME argv[5]
 
 /* 
 #define TARGET_FNAME argv[1]
@@ -29,7 +31,8 @@ int main(int argc, const char *argv[]) {
 	Index indexStructure; //La estructura index es compartida entre hilos
 	TargetLoader targetLoader;
 	std::set<Url> result;
-	std::string domainFilter {"savewalterwhite.com"};
+	//std::string domainFilter {"savewalterwhite.com"};
+	std::string domainFilter {ALLOWED_DOMAINS};
 
 	indexStructure.load(INDEX_FNAME);
 	targetLoader.load(blockingQueue, TARGET_FNAME);
@@ -40,7 +43,7 @@ int main(int argc, const char *argv[]) {
 	//worker2.start();
 	//worker3.start();
 	worker.start();
-	std::this_thread::sleep_for(std::chrono::seconds(2));
+	std::this_thread::sleep_for(std::chrono::seconds(3));
 	blockingQueue.close();
 
 	worker.join();

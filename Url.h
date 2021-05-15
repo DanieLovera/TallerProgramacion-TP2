@@ -17,7 +17,7 @@ class Url {
 
 	public:
 		Url();
-		Url(std::string url);
+		explicit Url(std::string url);
 		Url(Url &&other);
 		~Url();
 		Url& operator=(Url &&other);

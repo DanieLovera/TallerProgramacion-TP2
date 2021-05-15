@@ -2,6 +2,7 @@
 #define _READY_H_
 
 #include "UrlState.h"
+#include <string>
 
 class Ready : public UrlState {
 	private:

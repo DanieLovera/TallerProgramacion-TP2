@@ -5,6 +5,7 @@
 #include "Explored.h"
 #include "IfsMonitor.h"
 #include <iostream>
+#include <string>
 
 Url::Url() : Url { " " } { }
 
@@ -70,7 +71,7 @@ void Url::exploreLinks(IfsMonitor &ifsMonitor,
 }
 
 bool Url::isSubUrl(const std::string &url, const std::string &domainFilter) {
-	const std::string protocol {"http://"};
+	const std::string protocol("http://");
 	bool status = false;
 	std::size_t found = url.find(protocol);
 
@@ -87,7 +88,9 @@ bool Url::filter(const std::string &url, const std::string &domainFilter) {
 	if (found != std::string::npos) {
 		std::size_t domainLength = domainFilter.length();
 		if (found >= domainLength) {
-			status = (url.compare(found - domainLength, domainLength, domainFilter) == 0);
+			status = (url.compare(found - domainLength, 
+								  domainLength, 
+								  domainFilter) == 0);
 		}
 	}
 	return status;

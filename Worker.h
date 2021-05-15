@@ -3,6 +3,7 @@
 
 #include "Thread.h"
 #include <set>
+#include <string>
 class Url;
 class Index;
 class IfsMonitor;

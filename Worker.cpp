@@ -3,6 +3,8 @@
 #include "Index.h"
 #include <iostream>
 #include <sstream>
+#include <string>
+#include <set>
 
 Worker::Worker(Index &indexStructure, 
 			   IfsMonitor &ifsMonitor, 
@@ -25,10 +27,10 @@ Worker::Worker(Worker &&other) :
 Worker::~Worker() { }
 
 void Worker::pushUrls(const std::string &urlsFetched) {
-	std::istringstream iss {std::move(urlsFetched)};
+	std::istringstream iss(std::move(urlsFetched));
 	std::string readWord;
 	while(iss >> readWord) {
-		Url url {readWord};
+		Url url(readWord);
 		blockingQueue.push(std::move(url));
 	}	
 }
@@ -47,8 +49,7 @@ void Worker::run() {
 			url.exploreLinks(ifsMonitor, domainFilter, offset, size, urlsFetched);
 			pushUrls(urlsFetched);
 			result.insert(std::move(url));
-		
-		} catch (ClosedQueueException &error) {
+		} catch(ClosedQueueException &error) {
 			keepWorking = false;
 			//std::cout << error.what() << std::endl;
 		}

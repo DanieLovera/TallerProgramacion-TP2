@@ -4,6 +4,7 @@
 class Url;
 #include "Index.h"
 #include <cstddef>
+#include <string>
 
 class UrlState {
 	private:

@@ -5,6 +5,7 @@
 #include "Url.h"
 #include <map>
 #include <vector>
+#include <string>
 
 /*
  * Clase que contiene el archivo index en memoria.

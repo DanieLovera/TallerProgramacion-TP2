@@ -2,6 +2,7 @@
 #define _EXPLORED_H_
 
 #include "UrlState.h"
+#include <string>
 
 class Explored : public UrlState {
 	private:
