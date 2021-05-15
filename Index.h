@@ -6,6 +6,7 @@
 #include <map>
 #include <vector>
 #include <string>
+#include <mutex>
 
 /*
  * Clase que contiene el archivo index en memoria.
@@ -13,16 +14,10 @@
 class Index {
 	private:
 		std::map<Url, std::vector<std::size_t>> index;
+		std::mutex mutex;
 
 		Index(const Index &other) = delete;
 		Index& operator=(const Index &other) = delete;
-
-		/*
-		 * @brief Carga el map utilizando un ifsMonitor.
-		 * @param ifsMonitor: Debe estar inicializado correctamente con un
-		 * archivo que use el formato URL PAGE_OFFSET PAGE_SIZE.
-		 */
-		void loadIndex(IfsMonitor &ifsMonitor);
 
 	public:
 		/*
@@ -56,7 +51,7 @@ class Index {
 		 */
 		void load(const std::string &fileName);
 
-		void lookUp(Url &url, std::size_t &offset, std::size_t &size) const; 
+		void lookUp(const Url &url, std::size_t &offset, std::size_t &size) const; 
 };
 
 #endif // _INDEX_H_

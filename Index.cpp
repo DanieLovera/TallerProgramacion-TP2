@@ -3,6 +3,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <utility>
 
 #define INDEX_PARAMS 2
 #define PAGE_OFFSET 0
@@ -21,7 +22,8 @@ Index& Index::operator=(Index &&other) {
 	return *this;
 }
 
-void Index::loadIndex(IfsMonitor &ifsMonitor) {
+void Index::load(const std::string &fileName) {
+	IfsMonitor ifsMonitor(fileName);
 	std::string key;
 	std::string buffer;
 	const unsigned char buffer_base = 16;
@@ -34,16 +36,15 @@ void Index::loadIndex(IfsMonitor &ifsMonitor) {
 		mapped[PAGE_OFFSET] = std::stoul(buffer, nullptr, buffer_base);
 		ifsMonitor.readWord(buffer);
 		mapped[PAGE_SIZE] = std::stoul(buffer, nullptr, buffer_base);
+
+		std::lock_guard<std::mutex> lock(mutex);
 		index[std::move(url)] = std::move(mapped);
 	}
 }
 
-void Index::load(const std::string &fileName) {
-	IfsMonitor ifsMonitor(fileName);
-	loadIndex(ifsMonitor);
-}
-
-void Index::lookUp(Url &url, std::size_t &offset, std::size_t &size) const {
+void Index::lookUp(const Url &url, 
+				   std::size_t &offset, 
+				   std::size_t &size) const {
 	try {
 		const std::vector<std::size_t> &mapped = index.at(url);
 		offset = mapped[0];
