@@ -1,58 +1,55 @@
-#include "Index.h"
-#include "Url.h"
-#include "Worker.h"
+#include "IfsMonitor.h"
 #include "BlockingQueue.h"
+#include "IndexMonitor.h"
 #include "TargetLoader.h"
-#include "Index.h"
-
-#include <iostream>
-#include <thread>
+#include "SetMonitor.h"
+#include "Worker.h"
 #include <chrono>
-#include "Url.h"
+#include <string>
+#include <vector>
 
-#define TARGET_FNAME argv[1]
-#define INDEX_FNAME argv[2]
-#define PAGE_FNAME argv[3]
-#define ALLOWED_DOMAINS argv[4]
-//#define SLEEP_TIME argv[5]
-
-/* 
 #define TARGET_FNAME argv[1]
 #define ALLOWED_DOMAINS argv[2]
 #define THREADS_NUMBER argv[3]
 #define INDEX_FNAME argv[4]
 #define PAGE_FNAME argv[5]
 #define SLEEP_TIME argv[6]
-*/
 
 int main(int argc, const char *argv[]) {
-	IfsMonitor ifsMonitor {PAGE_FNAME}; //Ifstream es compartido entre hilos
-	BlockingQueue blockingQueue; //Cola bloqueante es compartida entre hilos
-	Index indexStructure; //La estructura index es compartida entre hilos
+	IfsMonitor ifsMonitor(PAGE_FNAME);
+	BlockingQueue blockingQueue;
+	IndexMonitor indexStructure;
 	TargetLoader targetLoader;
-	std::set<Url> result;
-	//std::string domainFilter {"savewalterwhite.com"};
-	std::string domainFilter {ALLOWED_DOMAINS};
+	SetMonitor result;
+	const std::string domainFilter(ALLOWED_DOMAINS);
 
 	indexStructure.load(INDEX_FNAME);
 	targetLoader.load(blockingQueue, TARGET_FNAME);
 
-	Worker worker {indexStructure, ifsMonitor, blockingQueue, result, domainFilter};
-	//Worker worker2 {indexStructure, ifsMonitor, blockingQueue, result, domainFilter};
-	//Worker worker3 {indexStructure, ifsMonitor, blockingQueue, result, domainFilter};
-	//worker2.start();
-	//worker3.start();
-	worker.start();
-	std::this_thread::sleep_for(std::chrono::seconds(3));
+	std::vector<Worker*> workers(atoi(THREADS_NUMBER));
+
+	for (int i = 0; i < atoi(THREADS_NUMBER); i++) {
+		Worker* worker = new Worker(indexStructure, 
+									ifsMonitor, 
+									blockingQueue, 
+									result, 
+									domainFilter);
+		workers[i] = worker;
+	}
+
+	for (int i = 0; i < atoi(THREADS_NUMBER); i++) {
+		workers[i]->start();
+	}
+
+	std::this_thread::sleep_for(std::chrono::seconds(atoi(SLEEP_TIME)));
 	blockingQueue.close();
 
-	worker.join();
-	//worker2.join();
-	//worker3.join();
-
-	for (const Url &url : result) {
-		url.print();
+	for (int i = 0; i < atoi(THREADS_NUMBER); i++) {
+		workers[i]->join();
+		delete workers[i];
 	}
+
+	result.print();
 
 	return 0;
 }

@@ -1,10 +1,9 @@
 #include "Thread.h"
+#include <utility>
 
 Thread::Thread() : thread {} { }
 	
-Thread::Thread(Thread &&other) {
-	thread = std::move(other.thread);
-}
+Thread::Thread(Thread &&other) : thread {std::move(other.thread)} { }
 
 Thread::~Thread() { }
 

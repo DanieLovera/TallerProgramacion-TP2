@@ -2,9 +2,12 @@
 #include "Dead.h"
 #include "Explored.h"
 #include "Url.h"
+#include "IfsMonitor.h"
+#include "IndexMonitor.h"
 #include <iostream>
 #include <sstream>
 #include <string>
+#include <utility>
 
 Ready::Ready() : UrlState { } { }
 
@@ -16,11 +19,11 @@ void Ready::print() const {
 	std::cout << "-> ready";
 }
 
-void Ready::handleValidation(const Index &indexStructure, 
+void Ready::handleValidation(const IndexMonitor &indexStructure, 
 							 std::size_t &offset, 
 							 std::size_t &size, 
 							 Url &context) {
-	indexStructure.lookUp(context, offset, size);
+	indexStructure.lookUp((const Url&)context, offset, size);
 	if (size == 0) context.setState(new Dead {});
 }
 

@@ -1,27 +1,29 @@
-#include "Index.h"
-
-#include <iostream>
+#include "IndexMonitor.h"
+#include "IfsMonitor.h"
 #include <string>
 #include <vector>
+#include <utility>
 
-#define INDEX_PARAMS 2
 #define PAGE_OFFSET 0
 #define PAGE_SIZE 1
+#define INDEX_PARAMS 2
 
-Index::Index() : index {} { }
+IndexMonitor::IndexMonitor() : index {} { }
 
-Index::Index(Index &&other) : index {std::move(other.index)} { }
+IndexMonitor::IndexMonitor(IndexMonitor &&other) : 
+				index {std::move(other.index)} { }
 
-Index::~Index() { }
+IndexMonitor::~IndexMonitor() { }
 
-Index& Index::operator=(Index &&other) {
+IndexMonitor& IndexMonitor::operator=(IndexMonitor &&other) {
 	if (this == &other) return *this;
 	this->index = std::move(other.index);
 
 	return *this;
 }
 
-void Index::loadIndex(IfsMonitor &ifsMonitor) {
+void IndexMonitor::load(const std::string &fileName) {
+	IfsMonitor ifsMonitor(fileName);
 	std::string key;
 	std::string buffer;
 	const unsigned char buffer_base = 16;
@@ -34,16 +36,15 @@ void Index::loadIndex(IfsMonitor &ifsMonitor) {
 		mapped[PAGE_OFFSET] = std::stoul(buffer, nullptr, buffer_base);
 		ifsMonitor.readWord(buffer);
 		mapped[PAGE_SIZE] = std::stoul(buffer, nullptr, buffer_base);
+
+		std::lock_guard<std::mutex> lock(mutex);
 		index[std::move(url)] = std::move(mapped);
 	}
 }
 
-void Index::load(const std::string &fileName) {
-	IfsMonitor ifsMonitor(fileName);
-	loadIndex(ifsMonitor);
-}
-
-void Index::lookUp(Url &url, std::size_t &offset, std::size_t &size) const {
+void IndexMonitor::lookUp(const Url &url, 
+				   		  std::size_t &offset, 
+				   		  std::size_t &size) const {
 	try {
 		const std::vector<std::size_t> &mapped = index.at(url);
 		offset = mapped[0];

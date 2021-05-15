@@ -1,15 +1,12 @@
 #include "Url.h"
-#include "Index.h"
 #include "Ready.h"
-#include "Dead.h"
-#include "Explored.h"
-#include "IfsMonitor.h"
 #include <iostream>
 #include <string>
+#include <utility>
 
 Url::Url() : Url { " " } { }
 
-Url::Url(std::string url) : url {url}, state {new Ready {}} { }
+Url::Url(const std::string &url) : url {url}, state {new Ready {}} { }
 
 Url::Url(Url &&other) : url {std::move(other.url)}, state {other.state} { 
 	other.state = nullptr;
@@ -27,10 +24,6 @@ Url& Url::operator=(Url &&other) {
 	other.state = nullptr;
 
 	return *this;
-}
-
-bool Url::equals(const Url &other) const {
-	return this->url.compare(other.url) == 0;
 }
 
 bool Url::operator<(const Url &other) const {
@@ -54,7 +47,7 @@ void Url::setState(UrlState *state) {
 	this->state = state;
 }
 
-void Url::validate(const Index &indexStructure, 
+void Url::validate(const IndexMonitor &indexStructure, 
 				   std::size_t &offset, 
 				   std::size_t &size) {
 	state->handleValidation(indexStructure, offset, size, *this);

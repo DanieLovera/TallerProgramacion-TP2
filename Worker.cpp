@@ -1,16 +1,15 @@
 #include "Worker.h"
 #include "BlockingQueue.h"
-#include "Index.h"
-#include <iostream>
+#include "SetMonitor.h"
 #include <sstream>
 #include <string>
-#include <set>
+#include <utility>
 
-Worker::Worker(Index &indexStructure, 
+Worker::Worker(IndexMonitor &indexStructure, 
 			   IfsMonitor &ifsMonitor, 
 			   BlockingQueue &blockingQueue, 
-			   std::set<Url> &result, 
-			   std::string &domainFilter) :
+			   SetMonitor &result,
+			   const std::string &domainFilter) :
 	indexStructure {indexStructure}, 
 	ifsMonitor {ifsMonitor}, 
 	blockingQueue {blockingQueue},
@@ -51,7 +50,6 @@ void Worker::run() {
 			result.insert(std::move(url));
 		} catch(ClosedQueueException &error) {
 			keepWorking = false;
-			//std::cout << error.what() << std::endl;
 		}
 	}
 }
