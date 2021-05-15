@@ -2,41 +2,56 @@
 #include "BlockingQueue.h"
 #include "Index.h"
 #include <iostream>
+#include <sstream>
+#include <string>
+#include <set>
 
 Worker::Worker(Index &indexStructure, 
 			   IfsMonitor &ifsMonitor, 
 			   BlockingQueue &blockingQueue, 
-			   std::set<Url> &result) :
+			   std::set<Url> &result, 
+			   std::string &domainFilter) :
 	indexStructure {indexStructure}, 
 	ifsMonitor {ifsMonitor}, 
 	blockingQueue {blockingQueue},
-	result {result} { }
+	result {result}, 
+	domainFilter {domainFilter} { }
 		
 Worker::Worker(Worker &&other) :
 							indexStructure {other.indexStructure}, 
 							ifsMonitor {other.ifsMonitor}, 
 							blockingQueue {other.blockingQueue},
-							result {other.result} { 
-}
+							result {other.result}, 
+							domainFilter {other.domainFilter} { }
 
 Worker::~Worker() { }
 
-void Worker::run() {
-	Url url;
-	std::size_t offset = 0;
-	std::size_t size = 0;
-	blockingQueue.pop(url);
-	indexStructure.lookUp(url, offset, size);
-	//std::cout << offset << " " << size << std::endl;
-	
-	/*if (size > 0) {
-		//PROCESAMOS
-		//SETEAMOS STATE DE URL A EXPLORED
-	} else {
-		//SETEAMOS STATE DE URL A DEAD
-	}*/
+void Worker::pushUrls(const std::string &urlsFetched) {
+	std::istringstream iss(std::move(urlsFetched));
+	std::string readWord;
+	while(iss >> readWord) {
+		Url url(readWord);
+		blockingQueue.push(std::move(url));
+	}	
+}
 
-	url.print();
-	//std::cout << "PROBANDO PROBANDO" << std::endl;
-	//std::cout << "PROBANDO PROBANDO2" << std::endl;
+void Worker::run() {
+	bool keepWorking = true;
+
+	while (keepWorking) {
+		try {
+			std::string urlsFetched;
+			std::size_t offset = 0;
+			std::size_t size = 0;
+
+			Url url = blockingQueue.pop();
+			url.validate(indexStructure, offset, size);
+			url.exploreLinks(ifsMonitor, domainFilter, offset, size, urlsFetched);
+			pushUrls(urlsFetched);
+			result.insert(std::move(url));
+		} catch(ClosedQueueException &error) {
+			keepWorking = false;
+			//std::cout << error.what() << std::endl;
+		}
+	}
 }

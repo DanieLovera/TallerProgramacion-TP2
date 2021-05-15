@@ -1,4 +1,6 @@
 #include "TargetLoader.h"
+#include <iostream>
+#include <string>
 
 TargetLoader::TargetLoader() { }
 
@@ -10,16 +12,16 @@ TargetLoader& TargetLoader::operator=(TargetLoader &&other) {
 	return *this;
 }
 
-void TargetLoader::loadQueue(BlockingQueue &blockingQueue, IfsMonitor &ifsMonitor) const {
+void TargetLoader::loadQueue(BlockingQueue &blockingQueue, 
+							 IfsMonitor &ifsMonitor) const {
 	std::string domain;
-
 	while (!ifsMonitor.readWord(domain)) {
-		Url url {domain};
+		Url url(domain);
 		blockingQueue.push(std::move(url));
 	}
 }
 
 void TargetLoader::load(BlockingQueue &blockingQueue, std::string fileName) {
-	IfsMonitor ifsMonitor {fileName};
+	IfsMonitor ifsMonitor(fileName);
 	loadQueue(blockingQueue, ifsMonitor);
 }
