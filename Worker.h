@@ -8,6 +8,7 @@ class Url;
 class Index;
 class IfsMonitor;
 class BlockingQueue;
+class SetMonitor;
 
 // Clase que es movible solamente cuando el objeto sea nuevamente
 // construido. El objeto movido no deberia ser usado de vuelta pese
@@ -17,7 +18,8 @@ class Worker : public Thread {
 		Index &indexStructure;
 		IfsMonitor &ifsMonitor;
 		BlockingQueue &blockingQueue;
-		std::set<Url> &result;
+		//std::set<Url> &result;
+		SetMonitor &result;
 		std::string &domainFilter;
 
 		Worker(const Worker &other) = delete;
@@ -29,7 +31,7 @@ class Worker : public Thread {
 		Worker(Index &indexStructure, 
 			   IfsMonitor &ifsMonitor, 
 			   BlockingQueue &blockingQueue, 
-			   std::set<Url> &result, 
+			   SetMonitor &result, 
 			   std::string &domainFilter);
 		Worker(Worker &&other);
 		~Worker();

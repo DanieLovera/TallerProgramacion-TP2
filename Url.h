@@ -17,12 +17,12 @@ class Url {
 
 	public:
 		Url();
-		explicit Url(std::string url);
+		explicit Url(const std::string &url);
 		Url(Url &&other);
 		~Url();
 		Url& operator=(Url &&other);
 		bool operator<(const Url &other) const;
-		bool equals(const Url &other) const;
+		//bool equals(const Url &other) const;
 		void validate(const Index &indexStructure, 
 				   	  std::size_t &offset, 
 				   	  std::size_t &size);

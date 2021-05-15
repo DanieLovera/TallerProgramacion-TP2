@@ -7,10 +7,10 @@
 #include <condition_variable>
 
 class ClosedQueueException : public std::exception {
-	public:
+	/*public:
 		const char *what() {
 			return "Queue is closed";
-		}
+		}*/
 };
 
 class BlockingQueue {

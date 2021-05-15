@@ -55,7 +55,7 @@ class IfsMonitor {
 		 */
 		bool readWord(std::string &buffer);
 
-		bool readLine(std::string &buffer);
+		//bool readLine(std::string &buffer);
 
 		void readBlockFromTo(char *buffer, std::size_t from, std::size_t to);
 };

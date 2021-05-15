@@ -1,15 +1,16 @@
 #include "Worker.h"
 #include "BlockingQueue.h"
 #include "Index.h"
+#include "SetMonitor.h"
 #include <iostream>
 #include <sstream>
 #include <string>
-#include <set>
+#include <utility>
 
 Worker::Worker(Index &indexStructure, 
 			   IfsMonitor &ifsMonitor, 
 			   BlockingQueue &blockingQueue, 
-			   std::set<Url> &result, 
+			   SetMonitor &result, 
 			   std::string &domainFilter) :
 	indexStructure {indexStructure}, 
 	ifsMonitor {ifsMonitor}, 

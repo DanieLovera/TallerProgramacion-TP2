@@ -6,10 +6,11 @@
 #include "IfsMonitor.h"
 #include <iostream>
 #include <string>
+#include <utility>
 
 Url::Url() : Url { " " } { }
 
-Url::Url(std::string url) : url {url}, state {new Ready {}} { }
+Url::Url(const std::string &url) : url {url}, state {new Ready {}} { }
 
 Url::Url(Url &&other) : url {std::move(other.url)}, state {other.state} { 
 	other.state = nullptr;
@@ -29,9 +30,9 @@ Url& Url::operator=(Url &&other) {
 	return *this;
 }
 
-bool Url::equals(const Url &other) const {
+/*bool Url::equals(const Url &other) const {
 	return this->url.compare(other.url) == 0;
-}
+}*/
 
 bool Url::operator<(const Url &other) const {
 	return this->url < other.url;

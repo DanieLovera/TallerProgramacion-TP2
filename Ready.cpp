@@ -5,6 +5,7 @@
 #include <iostream>
 #include <sstream>
 #include <string>
+#include <utility>
 
 Ready::Ready() : UrlState { } { }
 
@@ -20,7 +21,7 @@ void Ready::handleValidation(const Index &indexStructure,
 							 std::size_t &offset, 
 							 std::size_t &size, 
 							 Url &context) {
-	indexStructure.lookUp(context, offset, size);
+	indexStructure.lookUp((const Url&)context, offset, size);
 	if (size == 0) context.setState(new Dead {});
 }
 

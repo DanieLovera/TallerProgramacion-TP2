@@ -1,6 +1,7 @@
 #include "IfsMonitor.h"
 #include <iostream>
 #include <string>
+#include <utility>
 
 IfsMonitor::IfsMonitor(const std::string &fileName) : ifs {fileName} { }
 
@@ -17,9 +18,9 @@ IfsMonitor& IfsMonitor::operator=(IfsMonitor &&other) {
 	return *this;
 }
 
-bool IfsMonitor::readLine(std::string &buffer) {
+/*bool IfsMonitor::readLine(std::string &buffer) {
 	return std::getline(ifs, buffer).eof(); 
-}
+}*/
 
 bool IfsMonitor::readWord(std::string &buffer) {
 	return (ifs >> buffer).eof();
@@ -28,12 +29,13 @@ bool IfsMonitor::readWord(std::string &buffer) {
 void IfsMonitor::readBlockFromTo(char *buffer, 
 								 std::size_t from, 
 								 std::size_t to) {
-	std::unique_lock<std::mutex> lock(m);
+	std::lock_guard<std::mutex> lock(m);
 	ifs.seekg(from);
 	ifs.read(buffer, to);
 }
 
 void IfsMonitor::closeIfOpen() {
+	std::lock_guard<std::mutex> lock(m);
 	if (ifs.is_open()) {
 		ifs.close();
 	}
