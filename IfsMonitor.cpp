@@ -22,6 +22,7 @@ IfsMonitor& IfsMonitor::operator=(IfsMonitor &&other) {
 	return std::getline(ifs, buffer).eof(); 
 }*/
 
+// cppcheck-suppress constParameter
 bool IfsMonitor::readWord(std::string &buffer) {
 	return (ifs >> buffer).eof();
 }
