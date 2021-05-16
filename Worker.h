@@ -33,14 +33,14 @@ class Worker : public Thread {
 	public:
 		/*
 		 * @brief Constructor de la clase.
-		 * @brief indexStructure: indice que debe contener indicaciones
+		 * @param indexStructure: indice que debe contener indicaciones
 		 * para localizar las paginas de cada url.
-		 * @brief ifsMonitor: permite acceder a la lectura del archivo
+		 * @param ifsMonitor: permite acceder a la lectura del archivo
 		 * <pages> en memoria. Debe estar correctamente inicializado
 		 * para leer este archivo.
-		 * @brief setMonitor: coleccion comun en donde se guardaran
+		 * @param setMonitor: coleccion comun en donde se guardaran
 		 * los resultados del worker.
-		 * @brief domainFilter: nombre de dominio filtro para encontrar
+		 * @param domainFilter: nombre de dominio filtro para encontrar
 		 * urls especificas en el archivo <pages>.
 		 */
 		Worker(IndexMonitor &indexStructure, 

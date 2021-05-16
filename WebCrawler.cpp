@@ -3,10 +3,10 @@
 #include "IndexMonitor.h"
 #include "TargetLoader.h"
 #include "SetMonitor.h"
-#include "Worker.h"
-#include <chrono>
+#include "Workers.h"
 #include <string>
-#include <vector>
+#include <thread>
+#include <chrono>
 
 #define TARGET_FNAME argv[1]
 #define ALLOWED_DOMAINS argv[2]
@@ -16,40 +16,20 @@
 #define SLEEP_TIME argv[6]
 
 int main(int argc, const char *argv[]) {
+	TargetLoader targetLoader;
+	const std::string domainFilter(ALLOWED_DOMAINS);
+	Workers workers(atoi(THREADS_NUMBER));
+	IndexMonitor indexStructure;
 	IfsMonitor ifsMonitor(PAGE_FNAME);
 	BlockingQueue blockingQueue;
-	IndexMonitor indexStructure;
-	TargetLoader targetLoader;
 	SetMonitor result;
-	const std::string domainFilter(ALLOWED_DOMAINS);
 
-	indexStructure.load(INDEX_FNAME);
 	targetLoader.load(blockingQueue, TARGET_FNAME);
-
-	std::vector<Worker*> workers(atoi(THREADS_NUMBER));
-
-	for (int i = 0; i < atoi(THREADS_NUMBER); i++) {
-		Worker* worker = new Worker(indexStructure, 
-									ifsMonitor, 
-									blockingQueue, 
-									result, 
-									domainFilter);
-		workers[i] = worker;
-	}
-
-	for (int i = 0; i < atoi(THREADS_NUMBER); i++) {
-		workers[i]->start();
-	}
-
+	indexStructure.load(INDEX_FNAME);
+	workers.start(indexStructure, ifsMonitor, blockingQueue, result, domainFilter);
 	std::this_thread::sleep_for(std::chrono::seconds(atoi(SLEEP_TIME)));
 	blockingQueue.close();
-
-	for (int i = 0; i < atoi(THREADS_NUMBER); i++) {
-		workers[i]->join();
-		delete workers[i];
-	}
-
+	workers.join();
 	result.print();
-
 	return 0;
 }
