@@ -18,3 +18,9 @@ Entre las clases principales utilizadas para lograr implementar el Web Crawler m
 
 ---
 ### Desarrollo ##  
+En esta sección se encuentran detalles de implementación del Web Crawler e hilos, además de diagramas para facilitar la comprensión al lector del trabajo realizado.  
+#### Modelo del programa ####  
+
+![Diagrama de clases_01](./images/diagrama_01.png)  
+
+![Diagrama_de_clases_02](./images/diagrama_02.png)  
