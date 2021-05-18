@@ -29,6 +29,11 @@ class Worker : public Thread {
 		 * por un espacio.
 		 */
 		void pushUrls(const std::string &urlsResult);
+		
+		/*
+		 * @brief Operacion que se ejecutara concurrentemente en el thread.
+		 */	
+		void run() override;
 
 	public:
 		/*
@@ -59,11 +64,6 @@ class Worker : public Thread {
 		 * @brief Destructor de la clase.
 		 */
 		~Worker();
-
-		/*
-		 * @brief Operacion que se ejecutara concurrentemente en el thread.
-		 */	
-		void run() override;
 };
 
 #endif //_WORKER_H_

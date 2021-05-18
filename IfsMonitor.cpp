@@ -5,21 +5,13 @@
 
 IfsMonitor::IfsMonitor(const std::string &fileName) : ifs {fileName} { }
 
-IfsMonitor::IfsMonitor(IfsMonitor &&other) : ifs {std::move(other.ifs)} { }
-
 IfsMonitor::~IfsMonitor() {
 	closeIfOpen();
 }
 
-IfsMonitor& IfsMonitor::operator=(IfsMonitor &&other) {
-	if (this == &other) return *this;
-	closeIfOpen();
-	ifs = std::move(other.ifs);
-	return *this;
-}
-
 // cppcheck-suppress constParameter
 bool IfsMonitor::readWord(std::string &buffer) {
+	std::lock_guard<std::mutex> lock(mutex);
 	return (ifs >> buffer).eof();
 }
 
@@ -32,7 +24,6 @@ void IfsMonitor::readBlockFromTo(char *buffer,
 }
 
 void IfsMonitor::closeIfOpen() {
-	std::lock_guard<std::mutex> lock(mutex);
 	if (ifs.is_open()) {
 		ifs.close();
 	}

@@ -10,7 +10,9 @@ class SetMonitor {
 		std::set<Url> result;
 		std::mutex mutex;
 		SetMonitor(const SetMonitor &other) = delete;
+		SetMonitor(SetMonitor &&other) = delete;
 		SetMonitor& operator=(const SetMonitor &other) = delete;
+		SetMonitor& operator=(SetMonitor &&other) = delete;
 	
 	public:
 		/*
@@ -19,22 +21,9 @@ class SetMonitor {
 		SetMonitor();
 
 		/*
-		 * @brief Constructor por movimiento de la clase.
-		 * @param other: Objeto del cual se moveran los recursos.
-		 */
-		SetMonitor(SetMonitor &&other);
-
-		/*
 		 * @brief Destructor de la clase.
 		 */
 		~SetMonitor();
-
-		/*
-		 * @brief Asignacion por moviento
-		 * @param other: Objeto del cual se moveran los recursos.
-		 * @returns Devuelve una referencia a si mismo.
-		 */
-		SetMonitor& operator=(SetMonitor &&other);
 
 		/*
 		 * @brief Inserta un dato en la coleccion.

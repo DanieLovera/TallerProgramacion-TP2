@@ -10,17 +10,7 @@
 
 IndexMonitor::IndexMonitor() : index {} { }
 
-IndexMonitor::IndexMonitor(IndexMonitor &&other) : 
-				index {std::move(other.index)} { }
-
 IndexMonitor::~IndexMonitor() { }
-
-IndexMonitor& IndexMonitor::operator=(IndexMonitor &&other) {
-	if (this == &other) return *this;
-	this->index = std::move(other.index);
-
-	return *this;
-}
 
 void IndexMonitor::load(const std::string &fileName) {
 	IfsMonitor ifsMonitor(fileName);

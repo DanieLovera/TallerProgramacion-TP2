@@ -14,7 +14,9 @@ class IndexMonitor {
 		std::mutex mutex;
 
 		IndexMonitor(const IndexMonitor &other) = delete;
+		IndexMonitor(IndexMonitor &&other) = delete;
 		IndexMonitor& operator=(const IndexMonitor &other) = delete;
+		IndexMonitor& operator=(IndexMonitor &&other) = delete;
 
 	public:
 		/*
@@ -23,22 +25,9 @@ class IndexMonitor {
 		IndexMonitor();
 
 		/*
-		 * @brief Constructor por movimiento de la clase.
-		 * @param other: Objeto del cual se moveran los recursos.
-		 */
-		IndexMonitor(IndexMonitor &&other);
-
-		/*
 		 * @brief Destructor de la clase.
 		 */
 		~IndexMonitor();
-
-		/*
-		 * @brief Asignacion por moviento
-		 * @param other: Objeto del cual se moveran los recursos.
-		 * @returns Devuelve una referencia a si mismo.
-		 */
-		IndexMonitor& operator=(IndexMonitor &&other);
 
 		/*
 		 * @brief Carga el index utilizando el nombre de un archivo valido.

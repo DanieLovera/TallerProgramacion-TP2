@@ -12,6 +12,8 @@ class IfsMonitor {
 
 		IfsMonitor(const IfsMonitor &other) = delete;
 		IfsMonitor& operator=(const IfsMonitor &other) = delete;
+		IfsMonitor(IfsMonitor &&other) = delete;
+		IfsMonitor& operator=(IfsMonitor &&other) = delete;
 
 		/*
 		 * @brief Cierra el recurso file si se encuentra abierto.
@@ -26,22 +28,9 @@ class IfsMonitor {
 		explicit IfsMonitor(const std::string &fileName);
 
 		/*
-		 * @brief Constructor por movimiento de la clase.
-		 * @param other: Objeto del cual se moveran los recursos.
-		 */
-		IfsMonitor(IfsMonitor &&other);
-
-		/*
 		 * @brief Destructor de la clase.
 		 */
 		~IfsMonitor();
-		
-		/*
-		 * @brief Asignacion por moviento.
-		 * @param other: Objeto del cual se moveran los recursos.
-		 * @returns Devuelve una referencia a si mismo.
-		 */
-		IfsMonitor& operator=(IfsMonitor &&other);
 
 		/**
 		 * @brief Lee una palabra del archivo file y la almacena en buffer,
