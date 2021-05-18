@@ -17,7 +17,7 @@ Entre las clases principales utilizadas para lograr implementar el Web Crawler m
 - **IfsMonitor**: Abstracción que permite leer un archivo de entrada para proporcionarle datos al programa.  
 
 ---
-### Desarrollo ##  
+### Desarrollo ###  
 En esta sección se encuentran detalles de implementación del Web Crawler e hilos, además de diagramas para facilitar la comprensión al lector del trabajo realizado.  
 #### Modelo del programa ####  
 A continuación se presenta un diagrama que muestra como se relaciona el programa principal (Web Crawler) con otras clases para lograr su funcionamiento:  
@@ -114,4 +114,11 @@ Esta clase representa a un Web Crawler de un único hilo, hereda de la clase Thr
 
 ![Diagrama_de_clases_03](./images/diagrama_03.png)  
 
+##### Url #####  
+Esta es probablemente la clase mas importante para resolver el trabajo del Web Crawler, internamente implementa los estados correspondientes para cada url utilizando un patron state modificado para recibir un contexto via handlers en lugar de atributo, debido a que los estados no pueden mantener una referencia a su contexto mientras este contexto sea instanciado en el stack, promoviendo así el uso del stack. En el siguiente diagrama de clases se muestra como esta constituida una url y sus estados.  
+
 ![Diagrama_de_clases_02](./images/diagrama_02.png)  
+
+### Conclusiones ###  
+
+
