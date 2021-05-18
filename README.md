@@ -108,9 +108,10 @@ El *SetMonitor* se utilizó como un contenedor común en donde todos hilos inser
     for (const Url &url : result) {
       url.print();
     }
-``` 
+```  
+##### Worker #####  
+Esta clase representa a un Web Crawler de un único hilo, hereda de la clase Thread e implementa el método ```run()```, en donde realiza el trabajo de busqueda en el \<index\> y busqueda de urls en el \<pages\> delegando sobre las clases url y set. A continuación se presenta un diagrama con el funcionamiento de la clase.  
 
-
-
+![Diagrama_de_clases_03](./images/diagrama_03.png)  
 
 ![Diagrama_de_clases_02](./images/diagrama_02.png)  
